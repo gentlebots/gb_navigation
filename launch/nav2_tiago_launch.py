@@ -31,7 +31,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     # Get the launch directory
-    # SetEnvironmentVariable('LD_PRELOAD', '/usr/lib/x86_64-linux-gnu/libjemalloc.so.2')
+    jemalloc_env = SetEnvironmentVariable('LD_PRELOAD', '/usr/lib/x86_64-linux-gnu/libjemalloc.so.2')
     nav2_bringup_dir = get_package_share_directory('nav2_bringup')
     gb_nav_dir = get_package_share_directory('gb_navigation')
     gb_nav_launch_dir = os.path.join(gb_nav_dir, 'launch')
@@ -139,11 +139,15 @@ def generate_launch_description():
                           'params_file': params_file,
                           'bt_xml_file': default_bt_xml_file,
                           'autostart': autostart,
-                          'cmd_vel_topic': cmd_vel_topic}.items())        
+                          'cmd_vel_topic': cmd_vel_topic}.items())
+
+    odom_2_world_cmd = Node(package = "tf2_ros", 
+                       executable = "static_transform_publisher",
+                       arguments = ["2.74", "2.38", "0.0", "1.57", "0.0", "0.0", "odom", "world"])    
 
     # Create the launch description and populate
     ld = LaunchDescription()
-
+    ld.add_action(jemalloc_env)
     # Declare the launch options
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_use_namespace_cmd)
@@ -159,6 +163,7 @@ def generate_launch_description():
 
     # Add any conditioned actions
     ld.add_action(start_rviz_cmd)
+    ld.add_action(odom_2_world_cmd)
 
     # Add other nodes and processes we need
     #ld.add_action(exit_event_handler)
