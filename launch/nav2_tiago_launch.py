@@ -145,6 +145,21 @@ def generate_launch_description():
                        executable = "static_transform_publisher",
                        arguments = ["2.74", "2.38", "0.0", "1.57", "0.0", "0.0", "odom", "world"])    
 
+    # PDDL Actions
+    move_1_cmd = Node(
+        package='plansys2_bt_actions',
+        executable='bt_action_node',
+        name='move_1',
+        namespace=namespace,
+        output='screen',
+        parameters=[
+          gb_nav_dir + '/config/params.yaml',
+          {
+            'action_name': 'move',
+            'bt_xml_file': gb_nav_dir + '/behavior_trees_xml/move.xml'
+          }
+        ])
+
     # Create the launch description and populate
     ld = LaunchDescription()
     ld.add_action(jemalloc_env)
@@ -167,6 +182,10 @@ def generate_launch_description():
 
     # Add other nodes and processes we need
     #ld.add_action(exit_event_handler)
+
+    # Add PDDL Actions
+    ld.add_action(move_1_cmd)
+
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(bringup_cmd)  
