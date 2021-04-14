@@ -1,4 +1,4 @@
-(define (domain cooking)
+(define (domain robocup)
 (:requirements :strips :typing :adl :fluents :durative-actions :typing)
 
 ;; Types ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
