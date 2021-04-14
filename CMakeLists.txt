@@ -42,13 +42,13 @@ foreach(bt_plugin ${plugin_libs})
   target_compile_definitions(${bt_plugin} PRIVATE BT_PLUGIN_EXPORT)
 endforeach()
 
-add_executable(cooking_controller_node src/cooking_controller_node.cpp)
-ament_target_dependencies(cooking_controller_node ${dependencies})
+add_executable(dummy_controller_node src/dummy_controller_node.cpp)
+ament_target_dependencies(dummy_controller_node ${dependencies})
 
 install(DIRECTORY rviz maps params launch pddl behavior_trees_xml config DESTINATION share/${PROJECT_NAME})
 
 install(TARGETS
-  cooking_controller_node
+  dummy_controller_node
   ${plugin_libs}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
