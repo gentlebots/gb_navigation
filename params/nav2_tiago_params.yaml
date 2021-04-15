@@ -268,8 +268,8 @@ global_costmap:
       stvl_layer:
         plugin: "spatio_temporal_voxel_layer/SpatioTemporalVoxelLayer"
         enabled: false
-        voxel_decay: 15.
-        decay_model: 0
+        voxel_decay: 1.5 # 15 # reduced to be used with "dynamic environments"
+        decay_model: 0  #0=linear, 1=exponential, -1=persistent
         voxel_size: 0.05
         track_unknown_space: true
         max_obstacle_height: 2.0
@@ -284,6 +284,7 @@ global_costmap:
         mapping_mode: false
         map_save_duration: 60.0
         observation_sources: pointcloud
+        # Note: we can have a different set up for marking and clearing by duplicating the observation_source
         pointcloud:
           data_type: PointCloud2
           topic: /xtion/depth_registered/points
