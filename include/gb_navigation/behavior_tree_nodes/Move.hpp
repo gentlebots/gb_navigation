@@ -16,17 +16,13 @@
 #define GB_PLANSYS2_COMMON_ACTIONS__BEHAVIOR_TREE_NODES__MOVE_HPP_
 
 #include <string>
-#include <map>
 
-#include "geometry_msgs/msg/pose2_d.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "nav2_msgs/action/navigate_to_pose.hpp"
 
 #include "plansys2_bt_actions/BTActionNode.hpp"
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include "behaviortree_cpp_v3/bt_factory.h"
-#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
-
-#include "rclcpp_lifecycle/lifecycle_node.hpp"
 
 namespace gb_navigation
 {
@@ -46,15 +42,11 @@ public:
   static BT::PortsList providedPorts()
   {
     return {
-      BT::InputPort<std::string>("goal")
+      BT::InputPort<geometry_msgs::msg::PoseStamped>("goal")
     };
   }
-
-private:
-  int goal_reached_;
-  std::map<std::string, geometry_msgs::msg::Pose2D> waypoints_;
 };
 
-}  // namespace gb_plansys2_common_actions
+}  // namespace gb_navigation
 
 #endif  // GB_PLANSYS2_COMMON_ACTIONS__BEHAVIOR_TREE_NODES__MOVE_HPP_

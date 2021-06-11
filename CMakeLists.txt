@@ -12,6 +12,7 @@ find_package(plansys2_msgs REQUIRED)
 find_package(plansys2_executor REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(plansys2_bt_actions REQUIRED)
+find_package(behaviortree_cpp_v3 REQUIRED)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -27,15 +28,20 @@ set(dependencies
     plansys2_executor
     ament_index_cpp
     plansys2_bt_actions
+    behaviortree_cpp_v3
 )
 
 include_directories(include)
 
-add_library(plansys2_move_bt_node SHARED src/behavior_tree_nodes/Move.cpp)
-list(APPEND plugin_libs plansys2_move_bt_node)
+add_library(gb_move_bt_node SHARED src/behavior_tree_nodes/Move.cpp)
+list(APPEND plugin_libs gb_move_bt_node)
 
-add_library(plansys2_approach_object_bt_node SHARED src/behavior_tree_nodes/ApproachObject.cpp)
-list(APPEND plugin_libs plansys2_approach_object_bt_node)
+add_library(gb_approach_object_bt_node SHARED src/behavior_tree_nodes/ApproachObject.cpp)
+list(APPEND plugin_libs gb_approach_object_bt_node)
+
+add_library(gb_follow_bt_node SHARED src/behavior_tree_nodes/Follow.cpp)
+list(APPEND plugin_libs gb_follow_bt_node)
+
 
 foreach(bt_plugin ${plugin_libs})
   ament_target_dependencies(${bt_plugin} ${dependencies})
@@ -45,7 +51,7 @@ endforeach()
 add_executable(dummy_controller_node src/dummy_controller_node.cpp)
 ament_target_dependencies(dummy_controller_node ${dependencies})
 
-install(DIRECTORY rviz maps params launch pddl behavior_trees_xml config DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY rviz maps params launch config behavior_trees_xml DESTINATION share/${PROJECT_NAME})
 
 install(TARGETS
   dummy_controller_node

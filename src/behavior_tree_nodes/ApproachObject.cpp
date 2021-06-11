@@ -1,4 +1,4 @@
-// Copyright 2019 Intelligent Robotics Lab
+// Copyright 2021 Intelligent Robotics Lab
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,44 +14,54 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
+#include <memory>
+
+#include "ament_index_cpp/get_package_share_directory.hpp"
 
 #include "gb_navigation/behavior_tree_nodes/ApproachObject.hpp"
-
-#include "behaviortree_cpp_v3/behavior_tree.h"
 
 namespace gb_navigation
 {
 
 ApproachObject::ApproachObject(
   const std::string & xml_tag_name,
+  const std::string & action_name,
   const BT::NodeConfiguration & conf)
-: BT::ActionNodeBase(xml_tag_name, conf), counter_(0)
+: plansys2::BtActionNode<nav2_msgs::action::NavigateToPose>(xml_tag_name, action_name, conf)
 {
 }
 
 void
-ApproachObject::halt()
+ApproachObject::on_tick()
 {
-  std::cout << "ApproachObject halt" << std::endl;
+  geometry_msgs::msg::PoseStamped goal;
+  getInput<geometry_msgs::msg::PoseStamped>("goal", goal);
+
+  goal_.behavior_tree = ament_index_cpp::get_package_share_directory("plansys2_domain_expert") + 
+    "/behavior_trees_xml/ApproachObject_nav2_bt.xml";
+  goal_.pose = goal;
 }
 
 BT::NodeStatus
-ApproachObject::tick()
+ApproachObject::on_success()
 {
-  std::cout << "ApproachObject tick " << counter_ << std::endl;
-
-  if (counter_++ < 10) {
-    return BT::NodeStatus::RUNNING;
-  } else {
-    counter_ = 0;
-    return BT::NodeStatus::SUCCESS;
-  }
+  return BT::NodeStatus::SUCCESS;
 }
+
 
 }  // namespace gb_navigation
 
 #include "behaviortree_cpp_v3/bt_factory.h"
 BT_REGISTER_NODES(factory)
 {
-  factory.registerNodeType<gb_navigation::ApproachObject>("ApproachObject");
+  BT::NodeBuilder builder =
+    [](const std::string & name, const BT::NodeConfiguration & config)
+    {
+      return std::make_unique<gb_navigation::ApproachObject>(
+        name, "navigate_to_pose", config);
+    };
+
+  factory.registerBuilder<gb_navigation::ApproachObject>(
+    "ApproachObject", builder);
 }
