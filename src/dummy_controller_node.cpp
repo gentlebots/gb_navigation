@@ -18,7 +18,9 @@
 #include "plansys2_msgs/msg/action_execution_info.hpp"
 
 #include "plansys2_executor/ExecutorClient.hpp"
+#include "plansys2_domain_expert/DomainExpertClient.hpp"
 #include "plansys2_problem_expert/ProblemExpertClient.hpp"
+#include "plansys2_planner/PlannerClient.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
@@ -46,8 +48,10 @@ public:
 
   void init()
   {
+    domain_expert_ = std::make_shared<plansys2::DomainExpertClient>(shared_from_this());
     problem_expert_ = std::make_shared<plansys2::ProblemExpertClient>(shared_from_this());
     executor_client_ = std::make_shared<plansys2::ExecutorClient>(shared_from_this());
+    planner_client_ = std::make_shared<plansys2::PlannerClient>(shared_from_this());
 
     init_knowledge();
 
@@ -65,10 +69,20 @@ public:
     problem_expert_->setGoal(plansys2::Goal(goal_cmd));
     //problem_expert_->setGoal(plansys2::Goal("(and(robot_at r2d2 foodtray))"));
 
-    if (!executor_client_->start_plan_execution()) {
-      RCLCPP_ERROR(get_logger(), "Error starting a new plan (first)");
-    }
 
+    auto domain = domain_expert_->getDomain();
+    auto problem = problem_expert_->getProblem();
+    auto plan = planner_client_->getPlan(domain, problem);
+
+    if (plan.has_value()) {
+      if (!executor_client_->start_plan_execution(plan.value())) {
+        RCLCPP_ERROR(get_logger(), "Error starting a new plan (first)");
+      }
+    } else {
+      RCLCPP_ERROR_STREAM(
+        this->get_logger(),"Could not find plan to reach goal " <<
+        parser::pddl::toString(problem_expert_->getGoal()));
+    }
   }
 
   void init_knowledge()
@@ -139,7 +153,10 @@ public:
 
 private:
   std::shared_ptr<plansys2::ProblemExpertClient> problem_expert_;
+  std::shared_ptr<plansys2::DomainExpertClient> domain_expert_;
   std::shared_ptr<plansys2::ExecutorClient> executor_client_;
+  std::shared_ptr<plansys2::PlannerClient> planner_client_;
+
   std::map<std::string, std::string> robot_location_;
 };
 
