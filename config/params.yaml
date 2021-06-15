@@ -2,9 +2,33 @@ move_1:
   ros__parameters:
     plugins:
       - plansys2_move_bt_node
-    waypoints: ["foodtray", "near_lemon", "near_sugar"]
+    waypoints: ["storage_unit", "sorting_table_near_white", "sorting_table_near_yellow", "foodtray", "foodtray_left", "green_bin", "black_bin", "near_lemon", "inner_door"]
     waypoint_coords:
+      # where robot starts
+      #entrance: [-1.540, -0.210, 0.0]
+      # near entrance
+      storage_unit: [0.3, 0.0, -1.57]
+      # long table where food trays are
+      sorting_table_near_white: [1.1, 0.0, -1.57]
+      sorting_table_near_yellow: [1.28, 0.0, -1.57]
       foodtray: [1.585, 0.0, -1.57]
-      near_lemon: [2.18, 0.45, 0.0]
-      near_sugar: [1.65, 0.60, 2.121]
+      foodtray_left: [1.92, 0.0, -1.57]
+      # bins? area
+      green_bin: [2.42, 0.0, -1.57]
+      black_bin: [2.73, 0.0, -1.57]
+      # near area between rooms
+      near_lemon: [2.25, 0.45, 0.0]
+      inner_door: [2.5, 1.7, 0.0]
+      # Cuidado: objetos pequeños en el suelo a continuación!
+      # small_table
+      # wide_table
+      # book_shelves
+      # social_area
+
+
+
+
+
+
+
       

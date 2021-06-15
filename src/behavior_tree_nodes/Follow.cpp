@@ -17,30 +17,48 @@
 #include <vector>
 #include <memory>
 
-#include "gb_navigation/behavior_tree_nodes/Move.hpp"
+#include "ament_index_cpp/get_package_share_directory.hpp"
+
+#include "gb_navigation/behavior_tree_nodes/Follow.hpp"
+
+#include "rclcpp/rclcpp.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 
 namespace gb_navigation
 {
 
-Move::Move(
+Follow::Follow(
   const std::string & xml_tag_name,
   const std::string & action_name,
   const BT::NodeConfiguration & conf)
 : plansys2::BtActionNode<nav2_msgs::action::NavigateToPose>(xml_tag_name, action_name, conf)
 {
+  auto node = config().blackboard->get<rclcpp::Node::SharedPtr>("node");
+  pose_update_pub_ = node->create_publisher<geometry_msgs::msg::PoseStamped>("goal_update", 100);
 }
 
 void
-Move::on_tick()
+Follow::on_tick()
 {
   geometry_msgs::msg::PoseStamped goal;
-  getInput<geometry_msgs::msg::PoseStamped>("goal", goal);
+  getInput<geometry_msgs::msg::PoseStamped>("goal_pose", goal);
 
+  goal_.behavior_tree = ament_index_cpp::get_package_share_directory("plansys2_domain_expert") + 
+    "/behavior_trees_xml/Follow_nav2_bt.xml";
   goal_.pose = goal;
 }
 
+void
+Follow::on_wait_for_result()
+{
+  geometry_msgs::msg::PoseStamped goal;
+  getInput<geometry_msgs::msg::PoseStamped>("goal_pose", goal);
+
+  pose_update_pub_->publish(goal);
+}
+
 BT::NodeStatus
-Move::on_success()
+Follow::on_success()
 {
   return BT::NodeStatus::SUCCESS;
 }
@@ -54,10 +72,10 @@ BT_REGISTER_NODES(factory)
   BT::NodeBuilder builder =
     [](const std::string & name, const BT::NodeConfiguration & config)
     {
-      return std::make_unique<gb_navigation::Move>(
+      return std::make_unique<gb_navigation::Follow>(
         name, "navigate_to_pose", config);
     };
 
-  factory.registerBuilder<gb_navigation::Move>(
-    "Move", builder);
+  factory.registerBuilder<gb_navigation::Follow>(
+    "Follow", builder);
 }

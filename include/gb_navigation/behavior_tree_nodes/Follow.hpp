@@ -1,4 +1,4 @@
-// Copyright 2019 Intelligent Robotics Lab
+// Copyright 2021 Intelligent Robotics Lab
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PLANSYS2_BT_EXAMPLE__BEHAVIOR_TREE_NODES__APPROACHOBJECT_HPP_
-#define PLANSYS2_BT_EXAMPLE__BEHAVIOR_TREE_NODES__APPROACHOBJECT_HPP_
+#ifndef GB_PLANSYS2_COMMON_ACTIONS__BEHAVIOR_TREE_NODES__FOLLOW_HPP_
+#define GB_PLANSYS2_COMMON_ACTIONS__BEHAVIOR_TREE_NODES__FOLLOW_HPP_
 
 #include <string>
 
@@ -25,33 +25,35 @@
 #include "behaviortree_cpp_v3/bt_factory.h"
 
 #include "rclcpp/rclcpp.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 
 namespace gb_navigation
 {
 
-class ApproachObject : public plansys2::BtActionNode<
+class Follow : public plansys2::BtActionNode<
     nav2_msgs::action::NavigateToPose>
 {
 public:
-  explicit ApproachObject(
+  explicit Follow(
     const std::string & xml_tag_name,
     const std::string & action_name,
     const BT::NodeConfiguration & conf);
 
   void on_tick() override;
+  void on_wait_for_result() override;
   BT::NodeStatus on_success() override;
 
   static BT::PortsList providedPorts()
   {
     return {
-      BT::InputPort<geometry_msgs::msg::PoseStamped>("object_pose")
+      BT::InputPort<geometry_msgs::msg::PoseStamped>("goal_pose")
     };
   }
 
 private:
-  int counter_;
+  rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pose_update_pub_;
 };
 
 }  // namespace gb_navigation
 
-#endif  // PLANSYS2_BT_EXAMPLE__BEHAVIOR_TREE_NODES__APPROACHOBJECT_HPP_
+#endif  // GB_PLANSYS2_COMMON_ACTIONS__BEHAVIOR_TREE_NODES__FOLLOW_HPP_
