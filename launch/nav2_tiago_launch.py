@@ -143,7 +143,7 @@ def generate_launch_description():
 
     odom_2_world_cmd = Node(package = "tf2_ros", 
                        executable = "static_transform_publisher",
-                       arguments = ["2.74", "2.38", "0.0", "1.57", "0.0", "0.0", "odom", "world"])    
+                       arguments = ["2.9", "2.38", "0.0", "1.57", "0.0", "0.0", "odom", "world"])    
 
     # PDDL Actions
     move_1_cmd = Node(

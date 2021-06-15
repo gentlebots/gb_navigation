@@ -2,7 +2,9 @@ move_1:
   ros__parameters:
     plugins:
       - plansys2_move_bt_node
-    waypoints: ["foodtray", "near_lemon"]
+    waypoints: ["foodtray", "near_lemon", "near_sugar"]
     waypoint_coords:
       foodtray: [1.585, 0.0, -1.57]
-      near_lemon: [2.25, 0.45, 0.0]
+      near_lemon: [2.18, 0.45, 0.0]
+      near_sugar: [1.65, 0.60, 2.121]
+      
