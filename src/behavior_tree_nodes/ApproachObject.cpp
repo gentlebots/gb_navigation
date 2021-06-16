@@ -36,8 +36,9 @@ void
 ApproachObject::on_tick()
 {
   geometry_msgs::msg::PoseStamped goal;
-  getInput<geometry_msgs::msg::PoseStamped>("goal", goal);
-
+  getInput<geometry_msgs::msg::PoseStamped>("object_pose", goal);
+  goal.pose.position.z = 0.0;
+  
   goal_.behavior_tree = ament_index_cpp::get_package_share_directory("plansys2_domain_expert") + 
     "/behavior_trees_xml/ApproachObject_nav2_bt.xml";
   goal_.pose = goal;
