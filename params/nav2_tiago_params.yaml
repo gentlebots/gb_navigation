@@ -112,15 +112,36 @@ controller_server:
       yaw_goal_tolerance: 0.05
       stateful: True
     FollowPath:
+    #  plugin: "teb_local_planner::TebLocalPlannerROS"
+    #  footprint_model.type: circular
+    #  footprint_model.radius: 0.28
+    #  min_obstacle_dist: 0.05
+    #  inflation_dist: 0.1
+    #  costmap_converter_plugin: costmap_converter::CostmapToPolygonsDBSMCCH
+    #  costmap_converter_spin_thread: True
+    #  costmap_converter_rate: 15
+    #  enable_homotopy_class_planning: True
+    #  enable_multithreading: True
+    #  # weight_obstacle: 100.0
+    #  optimization_verbose: False
+    #  teb_autoresize: True
+    #  min_samples: 3
+    #  max_samples: 20
+    #  max_global_plan_lookahead_dist: 1.0
+    #  visualize_hc_graph: True
+    #  max_vel_x: 0.25
+    #  max_vel_theta: 0.4
+    #  acc_lim_x: 2.5
+    #  acc_lim_theta: 2.0
       plugin: "dwb_core::DWBLocalPlanner"
       debug_trajectory_details: True
       min_vel_x: 0.0
       min_vel_y: 0.0
-      max_vel_x: 0.5
+      max_vel_x: 0.3
       max_vel_y: 0.0
-      max_vel_theta: 1.5
+      max_vel_theta: 1.0
       min_speed_xy: 0.0
-      max_speed_xy: 0.5
+      max_speed_xy: 0.3
       min_speed_theta: 0.0
     # Add high threshold velocity for turtlebot 3 issue.
     # https://github.com/ROBOTIS-GIT/turtlebot3_simulations/issues/75

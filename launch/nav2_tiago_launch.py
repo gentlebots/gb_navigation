@@ -159,6 +159,20 @@ def generate_launch_description():
             'bt_xml_file': gb_nav_dir + '/behavior_trees_xml/move.xml'
           }
         ])
+    
+    search_1_cmd = Node(
+        package='plansys2_bt_actions',
+        executable='bt_action_node',
+        name='search_1',
+        namespace=namespace,
+        output='screen',
+        parameters=[
+          gb_nav_dir + '/config/params.yaml',
+          {
+            'action_name': 'search',
+            'bt_xml_file': gb_nav_dir + '/behavior_trees_xml/search.xml'
+          }
+        ])
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -185,7 +199,7 @@ def generate_launch_description():
 
     # Add PDDL Actions
     ld.add_action(move_1_cmd)
-
+    ld.add_action(search_1_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(bringup_cmd)  
