@@ -25,6 +25,15 @@ move_1:
       # book_shelves
       # social_area
 
+search_1:
+  ros__parameters:
+    plugins:
+      - gb_search_bt_node
+      - gb_get_search_pose_bt_node
+      - gb_move_bt_node
+      - gb_attention_track_bt_node
+      - gb_attention_scan_bt_node
+      
 
 
 
