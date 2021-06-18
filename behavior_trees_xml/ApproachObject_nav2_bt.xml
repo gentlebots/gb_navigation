@@ -3,8 +3,8 @@
     <PipelineSequence name="ApproachObject">
       <RateController hz="1.0">
         <Sequence>
-          <ComputePathToPose goal="{updated_goal}" path="{path}" planner_id="GridBased"/>
-          <TruncatePath distance="0.5" input_path="{path}" output_path="{truncated_path}"/>
+          <ComputePathToPose goal="{goal}" path="{path}" planner_id="GridBased"/>
+          <TruncatePath distance="0.35" input_path="{path}" output_path="{truncated_path}"/>
         </Sequence>
       </RateController>
       <FollowPath path="{truncated_path}" controller_id="FollowPath"/>
