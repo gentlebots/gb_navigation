@@ -18,6 +18,7 @@
 #include <memory>
 
 #include "gb_navigation/behavior_tree_nodes/Move.hpp"
+#include "ament_index_cpp/get_package_share_directory.hpp"
 
 namespace gb_navigation
 {
@@ -35,7 +36,8 @@ Move::on_tick()
 {
   geometry_msgs::msg::PoseStamped goal;
   getInput<geometry_msgs::msg::PoseStamped>("goal", goal);
-
+  goal_.behavior_tree = ament_index_cpp::get_package_share_directory("nav2_bt_navigator") + 
+    "/behavior_trees/navigate_w_replanning_and_recovery.xml";
   goal_.pose = goal;
 }
 

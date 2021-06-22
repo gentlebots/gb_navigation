@@ -2,8 +2,12 @@
    <BehaviorTree ID="MainTree">
       <Sequence name="search">
         <GetSearchPose  name="get_search_pose" wp_pose="{pose}"/>
-        <Parallel success_threshold="1" failure_threshold="1">
-          <Scan name="scan" mode="floor_near"/>
+        <Parallel success_threshold="2" failure_threshold="1">
+          <Parallel success_threshold="1" failure_threshold="1">
+            <isObjectPerceived name="is_object_perceived" />
+            <Scan name="scan" mode="floor_near"/>
+          </Parallel>
+          <!--Scan name="scan" mode="floor_near"/-->
           <Move name="move" goal="{pose}"/>
         </Parallel>
       </Sequence>

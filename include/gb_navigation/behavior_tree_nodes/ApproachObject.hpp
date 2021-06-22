@@ -26,6 +26,15 @@
 
 #include "rclcpp/rclcpp.hpp"
 
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "tf2/transform_datatypes.h"
+#include "tf2/LinearMath/Transform.h"
+#include "tf2_msgs/msg/tf_message.hpp"
+#include "tf2_ros/buffer.h"
+#include "tf2_ros/create_timer_ros.h"
+#include "tf2_ros/transform_broadcaster.h"
+#include "tf2_ros/transform_listener.h"
+
 namespace gb_navigation
 {
 
@@ -40,7 +49,9 @@ public:
 
   void on_tick() override;
   BT::NodeStatus on_success() override;
-
+  BT::NodeStatus on_aborted() override;
+  geometry_msgs::msg::PoseStamped 
+    pose2Map(geometry_msgs::msg::PoseStamped input);
   static BT::PortsList providedPorts()
   {
     return {
@@ -49,7 +60,8 @@ public:
   }
 
 private:
-  int counter_;
+  std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
+  std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
 };
 
 }  // namespace gb_navigation

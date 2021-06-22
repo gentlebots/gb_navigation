@@ -33,6 +33,7 @@ search_1:
       - gb_move_bt_node
       - gb_attention_track_bt_node
       - gb_attention_scan_bt_node
+      - gb_is_object_perceived_bt_node
       
 
 
