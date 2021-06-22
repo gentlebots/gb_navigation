@@ -1,10 +1,10 @@
 <root main_tree_to_execute = "MainTree" >
    <BehaviorTree ID="MainTree">
       <Sequence name="search">
-        <GetSearchPose  name="get_search_pose" wp_pose="{pose}"/>
+        <GetSearchPose  name="get_search_pose" location="search_area" wp_pose="{pose}"/>
         <Parallel success_threshold="2" failure_threshold="1">
           <Parallel success_threshold="1" failure_threshold="1">
-            <isObjectPerceived name="is_object_perceived" />
+            <isObjectPerceived name="is_object_perceived" target="any"/>
             <Scan name="scan" mode="floor_near"/>
           </Parallel>
           <Move name="move" goal="{pose}"/>

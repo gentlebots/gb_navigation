@@ -1,10 +1,18 @@
 <root main_tree_to_execute = "MainTree" >
    <BehaviorTree ID="MainTree">
       <Sequence name="shelf_search">
+        <!-- We know where to search from the beginning -->
         <GetSearchPose  name="get_search_pose" location="shelf" wp_pose="{pose}"/>
-        <Parallel success_threshold="1" failure_threshold="1">
-          <Scan name="scan" mode="shelving"/>
+        <!-- Move to the shelves while finding out what to search -->
+        <Parallel success_threshold="2" failure_threshold="1">
+          <!-- Target object was already published in a topic -->
+          <GetSearchObject name="get_search_object" object_id="{object}"/> 
           <Move name="move" goal="{pose}"/>
+        </Parallel>
+        <!-- Scanning until demanded object is found -->
+        <Parallel success_threshold="1" failure_threshold="1">
+          <isObjectPerceived name="is_object_perceived" target="{object}"/> 
+          <Scan name="scan" mode="shelving"/>
         </Parallel>
       </Sequence>
    </BehaviorTree>
