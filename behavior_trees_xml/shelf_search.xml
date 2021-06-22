@@ -3,7 +3,7 @@
       <Sequence name="shelf_search">
         <GetSearchPose  name="get_search_pose" location="shelf" wp_pose="{pose}"/>
         <Parallel success_threshold="1" failure_threshold="1">
-          <Scan name="scan" mode="up_down"/>
+          <Scan name="scan" mode="shelving"/>
           <Move name="move" goal="{pose}"/>
         </Parallel>
       </Sequence>
