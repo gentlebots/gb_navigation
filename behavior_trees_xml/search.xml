@@ -7,7 +7,6 @@
             <isObjectPerceived name="is_object_perceived" />
             <Scan name="scan" mode="floor_near"/>
           </Parallel>
-          <!--Scan name="scan" mode="floor_near"/-->
           <Move name="move" goal="{pose}"/>
         </Parallel>
       </Sequence>
